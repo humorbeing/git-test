@@ -210,6 +210,8 @@ for runs in range(1):
                                                num_workers=num_workers)
     running_loss = 0.0
     running_corrects = 0
+    class_correct = list(0. for i in range(batch_size))
+    class_total = list(0. for i in range(batch_size))
     model_conv.train(False)
     print()
     print('---Testing---')
@@ -227,39 +229,52 @@ for runs in range(1):
         loss = criterion(outputs, labels)
         running_corrects += torch.sum(preds == labels.data)
 
-    test_acc = running_corrects / len(test_dataset)
-
-    print("Test accuracy: {:4f}".format(test_acc))
-
-    class_correct = list(0. for i in range(batch_size))
-    class_total = list(0. for i in range(batch_size))
-    model_conv.train(False)
-    for data in test_loader:
-        inputs, labels = data
-
-        if gpu:
-            inputs, labels = Variable(inputs.cuda()), \
-                             Variable(labels.cuda())
-        else:
-            inputs, labels = Variable(inputs), Variable(labels)
-
-        outputs = model_conv(inputs)
-        _, preds = torch.max(outputs.data, 1)
-        print(preds)
-        print(labels)
         aa = preds.cpu().numpy()
         bb = labels.cpu().data.numpy()
-        print(len(bb))
-        print(len(dset_classes))
-        print(batch_size)
-        print((aa == bb))
-
+        # print(len(bb))
+        # print(len(dset_classes))
+        # print(batch_size)
+        # print((aa == bb))
 
         c = (aa == bb)
         for i in range(len(bb)):
             label = bb[i]
             class_correct[label] += c[i]
             class_total[label] += 1
+
+    test_acc = running_corrects / len(test_dataset)
+
+    print("Test accuracy: {:4f}".format(test_acc))
+    print('-'*20)
+
+    # class_correct = list(0. for i in range(batch_size))
+    # class_total = list(0. for i in range(batch_size))
+    # model_conv.train(False)
+    # for data in test_loader:
+    #     inputs, labels = data
+    #
+    #     if gpu:
+    #         inputs, labels = Variable(inputs.cuda()), \
+    #                          Variable(labels.cuda())
+    #     else:
+    #         inputs, labels = Variable(inputs), Variable(labels)
+    #
+    #     outputs = model_conv(inputs)
+    #     _, preds = torch.max(outputs.data, 1)
+    #     print(preds)
+    #     print(labels)
+    #     aa = preds.cpu().numpy()
+    #     bb = labels.cpu().data.numpy()
+    #     print(len(bb))
+    #     print(len(dset_classes))
+    #     print(batch_size)
+    #     print((aa == bb))
+    #
+    #     c = (aa == bb)
+    #     for i in range(len(bb)):
+    #         label = bb[i]
+    #         class_correct[label] += c[i]
+    #         class_total[label] += 1
 
 
     for i in range(len(dset_classes)):

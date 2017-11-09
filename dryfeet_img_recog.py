@@ -8,7 +8,7 @@ import numpy as np
 from torchvision import transforms
 import torch.nn.functional as F
 import tkinter
-
+# torch.nn.Module.dump_patches = True
 
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                  std=[0.229, 0.224, 0.225])
@@ -80,7 +80,8 @@ while True:
     out = torchvision.utils.make_grid(im_tensor)
     plt.rcdefaults()
     # plt.subplot.left=10
-    fig, ax = plt.subplots()
+    # fig, ax = plt.subplots()
+    fig = plt.figure(figsize=(5, 6))
     ax = plt.subplot(2,1,2)
     ax2 = plt.subplot(2,1,1)
     # fig.subplot.left = 10
