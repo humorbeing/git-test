@@ -253,9 +253,9 @@ for runs in range(1):
         print(len(dset_classes))
         print(batch_size)
         print((aa == bb))
-        print((aa == bb).squeeze())
 
-        c = (aa == bb).squeeze()
+
+        c = (aa == bb)
         for i in range(len(bb)):
             label = bb[i]
             class_correct[label] += c[i]
