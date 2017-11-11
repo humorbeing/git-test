@@ -9,16 +9,14 @@ from torchvision import transforms
 import numpy as np
 from torch.utils.data.sampler import SubsetRandomSampler
 import copy
+since = time.time()
 
-
-train_this = 'Batoidea(ga_oo_lee)'
-test_this = 'Batoidea(ga_oo_lee)'
+train_this = ''
+test_this = ''
 
 
 def trainer(trainee, testee):
     dataset_dir = './datasets/'
-    # trainee = 'Batoidea(ga_oo_lee)'
-    # testee = 'Batoidea(ga_oo_lee)'
     data_dir = dataset_dir+trainee
     test_dir = dataset_dir+testee
 
@@ -105,9 +103,7 @@ def trainer(trainee, testee):
         if gpu:
             gpu = True  # if model is too big for gpu, then false
 
-
         def train_model(model, criterion, optimizer, lr_scheduler, num_epochs=25):
-            since = time.time()
 
             best_model = model
             best_acc = 0.0
@@ -169,12 +165,8 @@ def trainer(trainee, testee):
 
                 print()
 
-            time_elapsed = time.time() - since
-            print('Training complete in {:.0f}m {:.0f}s'.format(
-                time_elapsed // 60, time_elapsed % 60))
             print('Best val Acc: {:4f}'.format(best_acc))
             return best_model
-
 
         def exp_lr_scheduler(optimizer, epoch, init_lr=0.01, lr_decay_epoch=decay):
             """Decay learning rate by a factor of 0.1 every lr_decay_epoch epochs."""
@@ -191,7 +183,6 @@ def trainer(trainee, testee):
         model_conv = torchvision.models.resnet18(pretrained=True)
         print('---Training last layer.---')
 
-        # gpu 9G memory
         for param in model_conv.parameters():
             param.requires_grad = False
 
@@ -208,7 +199,7 @@ def trainer(trainee, testee):
                                  exp_lr_scheduler, num_epochs=EPOCH)
         print()
         print('---Fine tuning.---')
-        # gpu 10G memory
+
         for param in model_conv.parameters():
             param.requires_grad = True
 
@@ -222,7 +213,6 @@ def trainer(trainee, testee):
                                                   batch_size=batch_size,
                                                   num_workers=num_workers)
 
-        running_loss = 0.0
         running_corrects = 0
         class_correct = list(0. for i in range(batch_size))
         class_total = list(0. for i in range(batch_size))
@@ -240,7 +230,6 @@ def trainer(trainee, testee):
 
             outputs = model_conv(inputs)
             _, preds = torch.max(outputs.data, 1)
-            loss = criterion(outputs, labels)
             running_corrects += torch.sum(preds == labels.data)
 
             aa = preds.cpu().numpy()
@@ -287,6 +276,9 @@ def trainer(trainee, testee):
     print()
     print('Model saved in "'+save_name+'".')
 
-
 for _ in range(10):
     trainer(train_this, test_this)
+
+time_elapsed = time.time() - since
+print('Training complete in {:.0f}m {:.0f}s'.format(
+    time_elapsed // 60, time_elapsed % 60))
