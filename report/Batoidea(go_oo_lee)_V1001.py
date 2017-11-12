@@ -292,7 +292,7 @@ for _ in range(10):
     trainer(train_this, test_this)
 
 
-'''/usr/bin/python3.5 "/home/visbic/python/pytorch/datasets/new fish/git-test/weight_trainer.py"
+'''/usr/bin/python3.5 "/home/visbic/python/pytorch/datasets/new fish/git-test/weight_trainera.py"
 --------------------
 
 run info[val: 0.1, epoch: 93, randcrop: True, decay: 8]
