@@ -11,8 +11,8 @@ from torch.utils.data.sampler import SubsetRandomSampler
 import copy
 
 
-train_this = 'Batoidea(ga_oo_lee)'
-test_this = 'Batoidea(ga_oo_lee)'
+train_this = 'tuna_fish'
+test_this = 'tuna_fish'
 
 
 def trainer(trainee, testee):
